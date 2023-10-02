@@ -84,3 +84,23 @@ This is not optimal, as not all the information is required for predicting every
 <p align="center">
     <img src="content/hiddn_state_point_wise.png" width=400 height="auto">
 </p>
+
+Another way is it to learn a weighted sum instead of doing pointwise addition. This gives network the ability to learn which part of the sentance is more relevant based on the context.
+
+
+<p align="center">
+    <img src="content/attn_weighted.png" width=400 height="auto">
+</p>
+
+The attention layers takes the current decoder state $s_{i-1}$ as the input along with the encoder hidden state $h_{j}$ to come up with a score $e_{ij}$ for each hidden state, where $i$ is ith token of the sequence and $j$ represents all possible hidden states.
+
+The score is then converted to probablity distribution over all encoder hidden states using software. 
+
+Finally, the context vector $c$ is called as the weighted sum of the hidden states where the weights are calculated using softmax.
+
+<p align="center">
+    <img src="content/attn_calculations.png" width=400 height="auto">
+</p>
+
+Since the attention paper is published, there have been many variants of attention mechanism. 
+The most popular one is as Transformers was published in paper titled [Attention Is All You Need](https://arxiv.org/abs/1706.03762) in 2017.
