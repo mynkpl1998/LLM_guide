@@ -56,3 +56,29 @@ $$ \alpha(q, k_{i}) = \frac{exp(a(q, k_{i}))}{\sum_{j=1}^{m} exp(a(q, k_{j}))} $
 <p align="center">
     <img src="content/attn_mech.png" width=400 height="auto">
 </p>
+
+### Scaled dot product attention
+
+
+#### Scoring function
+
+One of the way to calculate the similarity between keys and queries is to use dot product. This is commonly used attention scoring function in transformers.
+
+In practice, the query $q \in \mathcal{R}^{d}$, and the $k_{i} \in \mathcal{R}^{d}$ are all drawn randomly from zero mean and unit variance. The resulting dot product will have zero mean and variance $d$. These attention scores are further converted into probality by passing it through softmax. It was noted that without scaling, the softmax is pushed into the regions where gradient is very small. Hence, scaling by $d$ allows to counteract this effect.
+
+$$ a(q, k_{i}) = \frac{q^{\mathsf{T}}k_{i}}{\sqrt{d}} $$
+
+#### Calculating weights
+
+Once the scoring values are available for each keys $k_{i}$, those are converted into weights and multiplied by the values to come up with final attention values
+
+$$ \alpha(q, k_{i}) = \text{softmax}(a(q, k_{i})) = \frac{exp(a(q, k_{i}))}{\sum_{j} exp(a(q, k_{j})) } $$
+
+In general, both queries and keys are required to have the same vector length, say $d$. 
+
+Let's assume computing attention for $n$ queries, and $m$ key-value pairs, where the queries and keys are of length $d$ and values are of length $v$. 
+The scaled dot product of queries $\mathbf{Q} \in \mathcal{R}^{n \times d}$, keys $\mathbf{K} \in \mathcal{R}^{m \times d}$ and values $\mathbf{V} \in \mathcal{R}^{m \times v}$ can be written as 
+
+$$ \text{softmax} \left ( \frac{QK^{\mathbf{T}}}{\sqrt d} \right ) V \in \mathcal{R}^{n \times v} $$
+
+The above implemenation is for single batch but can be extended to multi-batch as well.
